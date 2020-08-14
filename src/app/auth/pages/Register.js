@@ -45,7 +45,7 @@ const Register = () => {
       })
       .catch((error) => {
         console.log("SIGNIN ERROR", error);
-        toast.error("username or password not correct");
+        toast.error(error);
         setFormData({ ...formData, buttonText: "Submit" });
       });
   };
