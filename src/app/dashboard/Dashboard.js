@@ -1,92 +1,87 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { APIContext } from "../context/Context";
 import Box from "../shared/Box";
 import NumberFormat from "react-number-format";
+import { getCookie } from "../auth/components/helper";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+import axios from "axios";
 
 // import DatePicker from 'react-datepicker';
 // import { Dropdown } from 'react-bootstrap';
 
 const Dashboard = () => {
   const { state } = useContext(APIContext);
-
   const { asset, expenses, services } = state;
+  const [selected, setSelected] = useState("");
+  const token = getCookie("token");
+  const [Form, setForm] = useState({
+    name: "",
+    principal: "",
+  });
 
-  // areaData = {
-  //   labels: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-  //   datasets: [
-  //     {
-  //       label: "Product-1",
-  //       data: [3, 3, 8, 5, 7, 4, 6, 4, 6, 3],
-  //       backgroundColor: "#2196f3",
-  //       borderColor: "#0c83e2",
-  //       borderWidth: 1,
-  //       fill: true,
-  //       datasetKeyProvider: "key1",
-  //     },
-  //     {
-  //       label: "Product-2",
-  //       data: [7, 5, 14, 7, 12, 6, 10, 6, 11, 5],
-  //       backgroundColor: "#19d895",
-  //       borderColor: "#15b67d",
-  //       borderWidth: 1,
-  //       fill: true,
-  //       datasetKeyProvider: "key2",
-  //     },
-  //   ],
-  // };
+  const handleTextFieldChange = (event) => {
+    const query = event.target.value;
+    if (query.toLowerCase() === "assets" || "services" || "expenses") {
+      setSelected(query.toLowerCase());
+      return true;
+    } else {
+      console.log("return an error here");
+      setSelected("");
+    }
+  };
 
-  // areaOptions = {
-  //   responsive: true,
-  //   maintainAspectRatio: true,
-  //   scales: {
-  //     yAxes: [
-  //       {
-  //         gridLines: {
-  //           color: "#F2F6F9",
-  //         },
-  //         ticks: {
-  //           beginAtZero: true,
-  //           min: 0,
-  //           max: 20,
-  //           stepSize: 5,
-  //         },
-  //       },
-  //     ],
-  //     xAxes: [
-  //       {
-  //         gridLines: {
-  //           color: "#F2F6F9",
-  //         },
-  //         ticks: {
-  //           beginAtZero: true,
-  //         },
-  //       },
-  //     ],
-  //   },
-  //   legend: {
-  //     display: false,
-  //   },
-  //   elements: {
-  //     point: {
-  //       radius: 2,
-  //     },
-  //   },
-  //   layout: {
-  //     padding: {
-  //       left: 0,
-  //       right: 0,
-  //       top: 0,
-  //       bottom: 0,
-  //     },
-  //   },
-  //   stepsize: 1,
-  // };
+  const handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.name;
+    setForm({
+      ...Form,
+      [name]: value,
+    });
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    if (selected !== "") {
+      const { name, principal } = Form;
+      console.log("set url", `${process.env.REACT_APP_API}/${selected}`);
+      await axios({
+        method: "POST",
+        url: `${process.env.REACT_APP_API}/${selected}`,
+        data: { name: name, amount: principal },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          toast.success(" data added succeesfully");
+        })
+        .catch((error) => {
+          console.log("cant add asset", error);
+          toast.error("cant add asset please check your input");
+        });
+
+      setForm({
+        ...Form,
+        name: "",
+        principal: "",
+      });
+      return true;
+    } else {
+      toast.error("You must select a type form the check box");
+      return false;
+    }
+
+    // window.location.reload();
+  };
 
   const getMonthlyAsset = () => {
     let monthly_credit = 0;
     asset.forEach(function (asset) {
-      monthly_credit += (asset.amount * asset.apr) / 100 / 12;
+      monthly_credit += asset.amount / 12;
     });
     return monthly_credit;
   };
@@ -108,12 +103,11 @@ const Dashboard = () => {
     return monthly_credit;
   };
 
-  // toggleProBanner() {
-  //   document.querySelector(".proBanner").classList.toggle("hide");
-  // }
+  const { name, principal } = Form;
 
   return (
     <div>
+      <ToastContainer />
       <div className="row">
         <Box
           name="Avg Monthly Asset"
@@ -221,23 +215,79 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="row">
-        <div className="col-md-12 grid-margin">
+        <div className="col-md-6 grid-margin">
           <div className="card">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2 className="card-title mb-0">Product Analysis</h2>
+                <h2 className="card-title mb-0">Add Services</h2>
                 <div className="wrapper d-flex">
                   <div className="d-flex align-items-center mr-3">
                     <span className="dot-indicator bg-success"></span>
-                    <p className="mb-0 ml-2 text-muted">Product</p>
+                    <p className="mb-0 ml-2 text-muted">Assets</p>
+                  </div>
+                  <div className="d-flex align-items-center mr-3">
+                    <span className="dot-indicator bg-danger"></span>
+                    <p className="mb-0 ml-2 text-muted">Expenses</p>
                   </div>
                   <div className="d-flex align-items-center">
                     <span className="dot-indicator bg-primary"></span>
-                    <p className="mb-0 ml-2 text-muted">Resources</p>
+                    <p className="mb-0 ml-2 text-muted">Services</p>
                   </div>
                 </div>
               </div>
               <div className="chart-container">
+                <form>
+                  <div className="form-row">
+                    <div className="form-group col-md-4">
+                      <label for="inputState">Selet Type</label>
+                      <select
+                        id="inputState"
+                        className="form-control"
+                        onChange={(event) => handleTextFieldChange(event)}
+                      >
+                        <option defaultValue>Choose Type</option>
+                        <option>Assets</option>
+                        <option>Services</option>
+                        <option>Expenses</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group col-md-6">
+                      <label for="inputEmail4">Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="inputEmail4"
+                        name="name"
+                        placeholder="Name"
+                        value={name}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label for="inputEmail4">Principal</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="inputEmail4"
+                        name="principal"
+                        value={principal}
+                        placeholder="Principl"
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="d-flex justify-content-center align-items-center col-md-12">
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        onClick={(e) => submitHandler(e)}
+                      >
+                        submit
+                      </button>
+                    </div>
+                  </div>
+                </form>
                 {/* <Line
                   data={this.areaData}
                   options={this.areaOptions}

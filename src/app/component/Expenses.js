@@ -18,7 +18,6 @@ const Expenses = () => {
   const [expensesForm, setExpensesForm] = useState({
     name: "",
     principal: "",
-    apr: "",
   });
 
   const [accrued_sum, setAccruedSum] = useState(0);
@@ -32,13 +31,13 @@ const Expenses = () => {
   const initState = () => {
     let accrued_sum_local = 0;
     expenses.map((item) => {
-      item.monthly_income = (item.amount * item.apr) / 100 / 12;
+      item.monthly_income = item.amount / 100 / 12;
       return item;
     });
 
     expenses.map(function (item) {
       let accrued = item.accrued || 0;
-      accrued += (item.amount * item.apr) / 100;
+      accrued += item.amount / 100;
       item.accrued = accrued;
       accrued_sum_local += accrued;
       return item;
@@ -130,19 +129,17 @@ const Expenses = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    const { name, principal } = expensesForm;
 
-    const { name, principal, apr } = expensesForm;
-    // console.log("submitting", name, principal, apr);
     await axios({
       method: "POST",
       url: `${process.env.REACT_APP_API}/expenses`,
-      data: { name: name, amount: principal, apr: apr },
+      data: { name: name, amount: principal },
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
-        // console.log("asset added successful", response);
         toast.success("expenses added succeesfully");
       })
       .catch((error) => {
@@ -154,14 +151,13 @@ const Expenses = () => {
       ...expensesForm,
       name: "",
       principal: "",
-      apr: "",
     });
 
     window.location.reload();
   };
 
-  const { name, principal, apr } = expensesForm;
-  const valid = name.length > 0 && principal.length > 0 && apr.length > 0;
+  const { name, principal } = expensesForm;
+  const valid = name.length > 0 && principal.length > 0;
 
   const Form = () => (
     <div className="row card d-flex justify-content-center align-item-center">
@@ -192,19 +188,6 @@ const Expenses = () => {
                 />
                 <small>eg. $1000</small>
               </div>
-              <div className="col-3">
-                <input
-                  className="form-control form-control-lg"
-                  type="number"
-                  min="0"
-                  max="100"
-                  placeholder="APR"
-                  name="apr"
-                  value={apr}
-                  onChange={handleInputChange}
-                />
-                <small>eg. 4</small>
-              </div>
             </div>
             <div className="form-row form-group d-flex d-row justify-content-center">
               <div className="col-sm-4 col-xs-4 col-md-4 col-lg-3">
@@ -231,9 +214,6 @@ const Expenses = () => {
           <th scope="col">
             <strong>Expenses</strong>
           </th>
-          <th scope="col">
-            <strong>APR</strong>
-          </th>
           <th scope="col">&nbsp;</th>
         </tr>
       </thead>
@@ -246,7 +226,6 @@ const Expenses = () => {
         >
           <tr className="bg-white">
             <th>
-              <strong>{item.name}</strong> ({item.apr}%)
               <br />
               <NumberFormat
                 value={item.amount}
@@ -257,15 +236,7 @@ const Expenses = () => {
               />
               <br />
             </th>
-            <td>
-              <NumberFormat
-                value={item.monthly_income}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={"$"}
-                decimalScale={0}
-              />
-            </td>
+
             <td>
               <button
                 className="btn btn-danger btn-sm"

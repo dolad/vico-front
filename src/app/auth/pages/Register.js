@@ -45,7 +45,7 @@ const Register = () => {
       })
       .catch((error) => {
         console.log("SIGNIN ERROR", error);
-        toast.error(error);
+        toast.error("email already exit");
         setFormData({ ...formData, buttonText: "Submit" });
       });
   };

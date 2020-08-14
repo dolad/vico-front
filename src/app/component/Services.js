@@ -18,7 +18,6 @@ export const Asset = () => {
   const [servicesForm, setServicesForm] = useState({
     name: "",
     principal: "",
-    apr: "",
   });
 
   const [accrued_sum, setAccruedSum] = useState(0);
@@ -32,13 +31,13 @@ export const Asset = () => {
   const initState = () => {
     let accrued_sum_local = 0;
     services.map((item) => {
-      item.monthly_income = (item.amount * item.apr) / 100 / 12;
+      item.monthly_income = item.amount / 12;
       return item;
     });
 
     services.map(function (item) {
       let accrued = item.accrued || 0;
-      accrued += (item.amount * item.apr) / 100;
+      accrued += item.amount;
       item.accrued = accrued;
       accrued_sum_local += accrued;
       return item;
@@ -60,23 +59,6 @@ export const Asset = () => {
 
     return total_principal + accrued_sum;
   };
-
-  //   const getTotalApr = () => {
-  //     let total_apr = 0;
-  //     let generating_assets_count = 0;
-
-  //     services.forEach(function (ass) {
-  //       if (ass.apr > 0) {
-  //         generating_assets_count++;
-  //       }
-  //       total_apr += ass.apr;
-  //     });
-
-  //     total_apr /= generating_assets_count;
-  //     total_apr = total_apr || 0;
-
-  //     return total_apr.toFixed(1);
-  //   };
 
   const getMonthlyCredit = () => {
     let monthly_credit = 0;
@@ -147,12 +129,11 @@ export const Asset = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    const { name, principal, apr } = servicesForm;
-    // console.log("submitting", name, principal, apr);
+    const { name, principal } = servicesForm;
     await axios({
       method: "POST",
       url: `${process.env.REACT_APP_API}/services`,
-      data: { name: name, amount: principal, apr: apr },
+      data: { name: name, amount: principal },
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -170,14 +151,13 @@ export const Asset = () => {
       ...servicesForm,
       name: "",
       principal: "",
-      apr: "",
     });
 
     window.location.reload();
   };
 
-  const { name, principal, apr } = servicesForm;
-  const valid = name.length > 0 && principal.length > 0 && apr.length > 0;
+  const { name, principal } = servicesForm;
+  const valid = name.length > 0 && principal.length > 0;
 
   const Form = () => (
     <div className="row card d-flex justify-content-center  align-item-center mt-5">
@@ -208,19 +188,6 @@ export const Asset = () => {
                 />
                 <small>eg. $1000</small>
               </div>
-              <div className="col-3">
-                <input
-                  className="form-control form-control-lg"
-                  type="number"
-                  min="0"
-                  max="100"
-                  placeholder="APR"
-                  name="apr"
-                  value={apr}
-                  onChange={handleInputChange}
-                />
-                <small>eg. 4</small>
-              </div>
             </div>
             <div className="form-row form-group d-flex d-row justify-content-center">
               <div className="col-sm-4 col-xs-4 col-md-4 col-lg-3">
@@ -247,9 +214,6 @@ export const Asset = () => {
           <th scope="col">
             <strong>Services</strong>
           </th>
-          <th scope="col">
-            <strong>APR</strong>
-          </th>
           <th scope="col">&nbsp;</th>
         </tr>
       </thead>
@@ -263,7 +227,6 @@ export const Asset = () => {
             className="bg-white"
           >
             <th>
-              <strong>{item.name}</strong> ({item.apr}%)
               <br />
               <NumberFormat
                 value={item.amount}
@@ -274,15 +237,7 @@ export const Asset = () => {
               />
               <br />
             </th>
-            <td>
-              <NumberFormat
-                value={item.monthly_income}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={"$"}
-                decimalScale={0}
-              />
-            </td>
+
             <td>
               <button
                 className="btn btn-danger btn-sm"
@@ -339,7 +294,7 @@ export const Asset = () => {
           isPercentage={false}
         />
         <Box
-          name=" Ann Est Principal"
+          name=" Avr Annual Principal"
           amount={getTotalEstimatedPrincipal()}
           isPercentage={false}
         />
