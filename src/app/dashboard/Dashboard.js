@@ -215,30 +215,17 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="row">
-        <div className="col-md-6 grid-margin">
+        <div className="col-md-4 grid-margin">
           <div className="card">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2 className="card-title mb-0">Add Services</h2>
-                <div className="wrapper d-flex">
-                  <div className="d-flex align-items-center mr-3">
-                    <span className="dot-indicator bg-success"></span>
-                    <p className="mb-0 ml-2 text-muted">Assets</p>
-                  </div>
-                  <div className="d-flex align-items-center mr-3">
-                    <span className="dot-indicator bg-danger"></span>
-                    <p className="mb-0 ml-2 text-muted">Expenses</p>
-                  </div>
-                  <div className="d-flex align-items-center">
-                    <span className="dot-indicator bg-primary"></span>
-                    <p className="mb-0 ml-2 text-muted">Services</p>
-                  </div>
-                </div>
+                <div className="wrapper d-flex"></div>
               </div>
               <div className="chart-container">
                 <form>
                   <div className="form-row">
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-6">
                       <label for="inputState">Selet Type</label>
                       <select
                         id="inputState"
@@ -288,6 +275,24 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </form>
+                {/* <Line
+                  data={this.areaData}
+                  options={this.areaOptions}
+                  datasetKeyProvider={this.datasetKeyProvider}
+                  height={80}
+                /> */}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-8  grid-margin">
+          <div className="card">
+            <div className="card-body">
+              <div className="d-flex justify-content-between align-items-center mb-4">
+                <h2 className="card-title mb-0">Graph</h2>
+                <div className="wrapper d-flex"></div>
+              </div>
+              <div className="chart-container">
                 {/* <Line
                   data={this.areaData}
                   options={this.areaOptions}

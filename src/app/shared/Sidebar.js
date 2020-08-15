@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Collapse } from "react-bootstrap";
+import "../App.css";
 
 class Sidebar extends Component {
   state = {};
@@ -53,7 +54,7 @@ class Sidebar extends Component {
           >
             <Link className="nav-link" to={`${this.props.match.url}`}>
               <i className="mdi mdi-television menu-icon"></i>
-              <span className="menu-title">Dashboard</span>
+              <span className="menu-title font-size-15">Dashboard</span>
             </Link>
           </li>
 
@@ -65,7 +66,7 @@ class Sidebar extends Component {
             }
           >
             <Link className="nav-link" to={`${this.props.match.url}/assets`}>
-              <i className="mdi mdi-chart-line menu-icon"></i>
+              <i className="mdi mdi-bank menu-icon"></i>
               <span className="menu-title">Assets</span>
             </Link>
           </li>
@@ -77,7 +78,7 @@ class Sidebar extends Component {
             }
           >
             <Link className="nav-link" to={`${this.props.match.url}/expenses`}>
-              <i className="mdi mdi-chart-line menu-icon"></i>
+              <i className="mdi mdi-google-circles-group menu-icon"></i>
               <span className="menu-title">Expenses</span>
             </Link>
           </li>
@@ -89,7 +90,7 @@ class Sidebar extends Component {
             }
           >
             <Link className="nav-link" to={`${this.props.match.url}/services`}>
-              <i className="mdi mdi-chart-line menu-icon"></i>
+              <i className="mdi  mdi-briefcase-upload menu-icon"></i>
               <span className="menu-title">Services</span>
             </Link>
           </li>
@@ -101,10 +102,10 @@ class Sidebar extends Component {
             }
           >
             <Link
-              className="nav-link"
+              className="nav-link "
               to={`${this.props.match.url}/users-profile`}
             >
-              <i className="mdi mdi-chart-line menu-icon"></i>
+              <i className="mdi mdi-account menu-icon"></i>
               <span className="menu-title">Users Profile</span>
             </Link>
           </li>

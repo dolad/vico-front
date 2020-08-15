@@ -90,3 +90,14 @@
   font-weight: 600;
   color: #0062cc;
 }
+
+.text-white {
+  color: dodgerblue;
+}
+
+.font-size-15 {
+  font-size: 20;
+}
+.active {
+  color: dodgerblue;
+}
