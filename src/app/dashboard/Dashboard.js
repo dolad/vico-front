@@ -7,6 +7,7 @@ import { getCookie } from "../auth/components/helper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import axios from "axios";
+import Area from "../charts/Area";
 
 // import DatePicker from 'react-datepicker';
 // import { Dropdown } from 'react-bootstrap';
@@ -69,13 +70,13 @@ const Dashboard = () => {
         name: "",
         principal: "",
       });
+      window.location.reload();
+
       return true;
     } else {
       toast.error("You must select a type form the check box");
       return false;
     }
-
-    // window.location.reload();
   };
 
   const getMonthlyAsset = () => {
@@ -292,13 +293,9 @@ const Dashboard = () => {
                 <h2 className="card-title mb-0">Graph</h2>
                 <div className="wrapper d-flex"></div>
               </div>
+
               <div className="chart-container">
-                {/* <Line
-                  data={this.areaData}
-                  options={this.areaOptions}
-                  datasetKeyProvider={this.datasetKeyProvider}
-                  height={80}
-                /> */}
+                <Area />
               </div>
             </div>
           </div>
