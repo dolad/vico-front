@@ -110,110 +110,22 @@ const Dashboard = () => {
     <div>
       <ToastContainer />
       <div className="row">
+        <Box name="Avg Asset" amount={getMonthlyAsset()} isPercentage={false} />
         <Box
-          name="Avg Monthly Asset"
-          amount={getMonthlyAsset()}
+          name="Avg Expenses"
+          amount={getMonthlyExpenses()}
           isPercentage={false}
         />
-        <div className="col-xl-3 col-lg-6 col-md-6 col-sm-6 grid-margin stretch-card">
-          <div className="card card-statistics">
-            <div className="card-body">
-              <div className="clearfix">
-                <div className="float-left">
-                  <i className="mdi mdi-receipt text-warning icon-lg"></i>
-                </div>
-                <div className="float-right">
-                  <p className="mb-0 text-right text-dark">
-                    Avg Monthly Expenses
-                  </p>
-                  <div className="fluid-container">
-                    <h3 className="font-weight-medium text-right mb-0 text-dark">
-                      <NumberFormat
-                        value={getMonthlyExpenses()}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"$"}
-                        // suffix={"%"}
-                        decimalScale={2}
-                      />
-                    </h3>
-                  </div>
-                </div>
-              </div>
-              <p className="text-muted mt-3 mb-0">
-                <i
-                  className="mdi mdi-bookmark-outline mr-1"
-                  aria-hidden="true"
-                ></i>{" "}
-                Average Monthly Expenses{" "}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-lg-6 col-md-6 col-sm-6 grid-margin stretch-card">
-          <div className="card card-statistics">
-            <div className="card-body">
-              <div className="clearfix">
-                <div className="float-left">
-                  <i className="mdi mdi-poll-box text-success icon-lg"></i>
-                </div>
-                <div className="float-right">
-                  <p className="mb-0 text-right text-dark">
-                    Avg Monthly Services
-                  </p>
-                  <div className="fluid-container">
-                    <h3 className="font-weight-medium text-right mb-0 text-dark">
-                      <NumberFormat
-                        value={getMonthlyServices()}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"$"}
-                        // suffix={"%"}
-                        decimalScale={2}
-                      />
-                    </h3>
-                  </div>
-                </div>
-              </div>
-              <p className="text-muted mt-3 mb-0">
-                <i className="mdi mdi-calendar mr-1" aria-hidden="true"></i>{" "}
-                Monthly Expenses{" "}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-lg-6 col-md-6 col-sm-6 grid-margin stretch-card">
-          <div className="card card-statistics">
-            <div className="card-body">
-              <div className="clearfix">
-                <div className="float-left">
-                  <i className="mdi mdi-account-box-multiple text-info icon-lg"></i>
-                </div>
-                <div className="float-right">
-                  <p className="mb-0 text-right text-dark">
-                    Avg Daily Expenses
-                  </p>
-                  <div className="fluid-container">
-                    <h3 className="font-weight-medium text-right mb-0 text-dark">
-                      <NumberFormat
-                        value={getMonthlyExpenses() / 30}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"$"}
-                        // suffix={"%"}
-                        decimalScale={2}
-                      />
-                    </h3>
-                  </div>
-                </div>
-              </div>
-              <p className="text-muted mt-3 mb-0">
-                <i className="mdi mdi-reload mr-1" aria-hidden="true"></i>{" "}
-                Product-wise sales{" "}
-              </p>
-            </div>
-          </div>
-        </div>
+        <Box
+          name="Avg Monthly Services"
+          amount={getMonthlyServices()}
+          isPercentage={false}
+        />
+        <Box
+          name="Avg Daily Serivice"
+          amount={getMonthlyExpenses() / 30}
+          isPercentage={false}
+        />
       </div>
       <div className="row">
         <div className="col-md-4 grid-margin">
