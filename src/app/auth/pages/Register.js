@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Alert } from "react-bootstrap";
+import Facebook from "../components/Facebook";
+import Google from "../components/Google";
+import { isAuth, authenticate } from "../components/helper";
 
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
-const Register = () => {
+const Register = ({ history }) => {
   const [formData, setFormData] = useState({
     firstname: "david",
     lastname: "devison",
@@ -20,6 +23,13 @@ const Register = () => {
     setFormData({ ...formData, [name]: event.target.value });
   };
 
+  const informParent = (response) => {
+    authenticate(response, () => {
+      isAuth() && isAuth().role === "admin"
+        ? history.push("/admin")
+        : history.push("/dashboard");
+    });
+  };
   const { lastname, firstname, email, password, buttonText } = formData;
 
   const clickSubmit = (event) => {
@@ -126,23 +136,26 @@ const Register = () => {
                   </div>
                 </div>
                 <div className="mb-2">
-                  <button
+                  {/* <button
                     type="button"
                     className="btn btn-block btn-facebook auth-form-btn"
                     disabled={buttonDisable}
                   >
                     <i className="mdi mdi-facebook mr-2"></i>Connect using
                     Facebook
-                  </button>
-                </div>{" "}
+                  </button> */}
+                  <Facebook informParent={informParent} />
+                </div>
                 <div className="mb-2">
-                  <button
+                  <Google informParent={informParent} />
+
+                  {/* <button
                     type="button"
                     className="btn btn-block btn-google auth-form-btn"
                     disabled={buttonDisable}
                   >
                     <i className="mdi mdi-google mr-2"></i>Connect using Google
-                  </button>
+                  </button> */}
                 </div>
                 <div className="mt-3">
                   <Button
