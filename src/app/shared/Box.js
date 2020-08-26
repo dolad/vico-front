@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import NumberFormat from "react-number-format";
-
+import { setCurrencySymbol } from "../shared/currency_symbol";
 const Box = (props) => {
-  const { name, amount, isPercentage } = props;
+  const { name, amount, currency, isPercentage } = props;
+  const [symbol, setSymbol] = useState("");
+
+  useEffect(() => {
+    setSymbol(setCurrencySymbol(currency));
+  }, [currency]);
+
   return (
     <div className="col-xl-3 col-lg-6 col-md-6 col-sm-6 grid-margin stretch-card">
       <div className="card card-statistics">
@@ -21,7 +27,7 @@ const Box = (props) => {
                       value={amount}
                       displayType={"text"}
                       thousandSeparator={true}
-                      prefix={"$"}
+                      prefix={symbol}
                       // suffix={"%"}
                       decimalScale={2}
                     />

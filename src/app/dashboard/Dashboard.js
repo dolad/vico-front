@@ -1,14 +1,11 @@
-import React, { useContext, useState } from "react";
-import { Line } from "react-chartjs-2";
+import React, { useContext, useState, useEffect } from "react";
 import { APIContext } from "../context/Context";
 import Box from "../shared/Box";
-import NumberFormat from "react-number-format";
 import { getCookie } from "../auth/components/helper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import axios from "axios";
 import Area from "../charts/Area";
-
 // import DatePicker from 'react-datepicker';
 // import { Dropdown } from 'react-bootstrap';
 
@@ -16,11 +13,29 @@ const Dashboard = () => {
   const { state } = useContext(APIContext);
   const { asset, expenses, services } = state;
   const [selected, setSelected] = useState("");
+  const [currency, setCurrency] = useState("");
+
   const token = getCookie("token");
   const [Form, setForm] = useState({
     name: "",
     principal: "",
   });
+
+  useEffect(() => {
+    fetchCurrency();
+  }, []);
+
+  const fetchCurrency = async () => {
+    await axios
+      .get("https://ipapi.co/json/")
+      .then((response) => {
+        let data = response.data;
+        setCurrency(data.currency);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleTextFieldChange = (event) => {
     const query = event.target.value;
@@ -110,19 +125,27 @@ const Dashboard = () => {
     <div>
       <ToastContainer />
       <div className="row">
-        <Box name="Avg Asset" amount={getMonthlyAsset()} isPercentage={false} />
+        <Box
+          name="Avg Asset"
+          currency={currency}
+          amount={getMonthlyAsset()}
+          isPercentage={false}
+        />
         <Box
           name="Avg Expenses"
+          currency={currency}
           amount={getMonthlyExpenses()}
           isPercentage={false}
         />
         <Box
           name="Avg Monthly Services"
+          currency={currency}
           amount={getMonthlyServices()}
           isPercentage={false}
         />
         <Box
           name="Avg Daily Serivice"
+          currency={currency}
           amount={getMonthlyExpenses() / 30}
           isPercentage={false}
         />
@@ -188,12 +211,6 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </form>
-                {/* <Line
-                  data={this.areaData}
-                  options={this.areaOptions}
-                  datasetKeyProvider={this.datasetKeyProvider}
-                  height={80}
-                /> */}
               </div>
             </div>
           </div>

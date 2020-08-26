@@ -8,6 +8,7 @@ import { Line, Bar, Doughnut, Pie, Scatter } from "react-chartjs-2";
 
 import axios from "axios";
 import Box from "../shared/Box";
+import { setCurrencySymbol } from "../shared/currency_symbol";
 
 export const Asset = () => {
   const { state } = useContext(APIContext);
@@ -22,11 +23,22 @@ export const Asset = () => {
 
   const [accrued_sum, setAccruedSum] = useState(0);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [currency, setCurrency] = useState("");
+  const [symbol, setSymbol] = useState("");
 
   // logic //
   useEffect(() => {
     initState();
   }, [services]);
+
+  useEffect(() => {
+    fetchCurrency();
+  }, []);
+
+  // for use cases other than box
+  useEffect(() => {
+    setSymbol(setCurrencySymbol(currency));
+  }, [currency]);
 
   const initState = () => {
     let accrued_sum_local = 0;
@@ -43,6 +55,18 @@ export const Asset = () => {
       return item;
     });
     setAccruedSum(accrued_sum_local);
+  };
+
+  const fetchCurrency = async () => {
+    await axios
+      .get("https://ipapi.co/json/")
+      .then((response) => {
+        let data = response.data;
+        setCurrency(data.currency);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   // setMonthlyIncome(asset[asset.length - 1].monthly_income);
@@ -186,7 +210,7 @@ export const Asset = () => {
                   value={principal}
                   onChange={handleInputChange}
                 />
-                <small>eg. $1000</small>
+                <small>eg. {symbol} 1000</small>
               </div>
             </div>
             <div className="form-row form-group d-flex d-row justify-content-center">
@@ -232,7 +256,7 @@ export const Asset = () => {
                 value={item.amount}
                 displayType={"text"}
                 thousandSeparator={true}
-                prefix={"$"}
+                prefix={symbol}
                 decimalScale={0}
               />
               <br />
@@ -252,22 +276,6 @@ export const Asset = () => {
     </table>
   );
 
-  // console.log("before area", getAssetArray());
-  // const Area = () => (
-  //   <>
-  //     {getAssetArray() && (
-  //       <div className="col-md-6 grid-margin stretch-card">
-  //         <div className="card">
-  //           <div className="card-body">
-  //             <h4 className="card-title">Area Chart</h4>
-  //             <Line data={areaData} options={areaOptions} />
-  //           </div>
-  //         </div>
-  //       </div>
-  //     )}
-  //   </>
-  // );
-
   return (
     <div>
       <ToastContainer />
@@ -275,26 +283,31 @@ export const Asset = () => {
       <div className="row">
         <Box
           name="Avg Monthly Credit"
+          currency={currency}
           amount={getMonthlyCredit()}
           isPercentage={false}
         />
         <Box
           name="Avg Daily Credi"
+          currency={currency}
           amount={getMonthlyCredit() / 30}
           isPercentage={false}
         />
         <Box
           name="Avg Hour Credit"
+          currency={currency}
           amount={getMonthlyCredit() / 30 / 24}
           isPercentage={false}
         />
         <Box
           name="Avg Yearly Credit"
+          currency={currency}
           amount={getMonthlyCredit() * 12}
           isPercentage={false}
         />
         <Box
           name=" Avr Annual Principal"
+          currency={currency}
           amount={getTotalEstimatedPrincipal()}
           isPercentage={false}
         />

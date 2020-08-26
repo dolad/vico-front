@@ -4,7 +4,7 @@ import { getCookie } from "../auth/components/helper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import NumberFormat from "react-number-format";
-import { Line, Bar, Doughnut, Pie, Scatter } from "react-chartjs-2";
+import { setCurrencySymbol } from "../shared/currency_symbol";
 
 import axios from "axios";
 import Box from "../shared/Box";
@@ -20,13 +20,24 @@ const Expenses = () => {
     principal: "",
   });
 
+  const token = getCookie("token");
   const [accrued_sum, setAccruedSum] = useState(0);
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [currency, setCurrency] = useState("");
+  const [symbol, setSymbol] = useState("");
 
   // logic //
   useEffect(() => {
     initState();
   }, [expenses]);
+
+  useEffect(() => {
+    fetchCurrency();
+  }, []);
+
+  // for use cases other than box
+  useEffect(() => {
+    setSymbol(setCurrencySymbol(currency));
+  }, [currency]);
 
   const initState = () => {
     let accrued_sum_local = 0;
@@ -69,27 +80,16 @@ const Expenses = () => {
     return monthly_debit;
   };
 
-  // const getAssetArray = () => {
-  //   let assetArray = [];
-
-  //   asset.forEach(function (ass) {
-  //     assetArray.push(ass.accrued);
-  //   });
-
-  //   return assetArray;
-  // };
-
-  // const areaOptions = {
-  //   plugins: {
-  //     filler: {
-  //       propagate: true,
-  //     },
-  //   },
-  // };
-
-  //  form controls//
-  const showAddForms = () => {
-    setShowAddForm(!showAddForm);
+  const fetchCurrency = async () => {
+    await axios
+      .get("https://ipapi.co/json/")
+      .then((response) => {
+        let data = response.data;
+        setCurrency(data.currency);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleInputChange = (event) => {
@@ -124,8 +124,6 @@ const Expenses = () => {
 
     window.location.reload();
   };
-
-  const token = getCookie("token");
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -186,7 +184,7 @@ const Expenses = () => {
                   value={principal}
                   onChange={handleInputChange}
                 />
-                <small>eg. $1000</small>
+                <small>eg. {symbol} 1000</small>
               </div>
             </div>
             <div className="form-row form-group d-flex d-row justify-content-center">
@@ -231,7 +229,7 @@ const Expenses = () => {
                 value={item.amount}
                 displayType={"text"}
                 thousandSeparator={true}
-                prefix={"$"}
+                prefix={symbol}
                 decimalScale={0}
               />
               <br />
@@ -252,22 +250,6 @@ const Expenses = () => {
     </table>
   );
 
-  // console.log("before area", getAssetArray());
-  // const Area = () => (
-  //   <>
-  //     {getAssetArray() && (
-  //       <div className="col-md-6 grid-margin stretch-card">
-  //         <div className="card">
-  //           <div className="card-body">
-  //             <h4 className="card-title">Area Chart</h4>
-  //             <Line data={areaData} options={areaOptions} />
-  //           </div>
-  //         </div>
-  //       </div>
-  //     )}
-  //   </>
-  // );
-
   return (
     <div>
       <ToastContainer />
@@ -275,26 +257,31 @@ const Expenses = () => {
       <div className="row">
         <Box
           name="Avg Monthly Debit"
+          currency={currency}
           amount={getMonthlyDebit()}
           isPercentage={false}
         />
         <Box
           name="Avg Daily Debit"
+          currency={currency}
           amount={getMonthlyDebit() / 30}
           isPercentage={false}
         />
         <Box
           name="Avg Hour Debit"
+          currency={currency}
           amount={getMonthlyDebit() / 30 / 24}
           isPercentage={false}
         />
         <Box
           name="Avg Yearly Debit"
+          currency={currency}
           amount={getMonthlyDebit() * 12}
           isPercentage={false}
         />
         <Box
           name="Avg Est Principal "
+          currency={currency}
           amount={getTotalEstimatedPrincipal()}
           isPercentage={false}
         />

@@ -4,6 +4,7 @@ import { getCookie } from "../auth/components/helper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import NumberFormat from "react-number-format";
+import { setCurrencySymbol } from "../shared/currency_symbol";
 
 import axios from "axios";
 import Box from "../shared/Box";
@@ -12,20 +13,28 @@ export const Asset = () => {
   const { state } = useContext(APIContext);
   // console.log(state);
   const { asset } = state;
-
-  const [monthly_income, setMonthlyIncome] = useState(0);
+  const token = getCookie("token");
   const [assetForm, setAssetsForm] = useState({
     name: "",
     principal: "",
   });
-
   const [accrued_sum, setAccruedSum] = useState(0);
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [currency, setCurrency] = useState("");
+  const [symbol, setSymbol] = useState("");
 
   // logic //
   useEffect(() => {
     initState();
   }, [asset]);
+
+  // for use cases other than box
+  useEffect(() => {
+    setSymbol(setCurrencySymbol(currency));
+  }, [currency]);
+
+  useEffect(() => {
+    fetchCurrency();
+  }, []);
 
   const initState = () => {
     let accrued_sum_local = 0;
@@ -33,7 +42,6 @@ export const Asset = () => {
       item.monthly_income = item.amount / 12;
       return item;
     });
-
     asset.map(function (item) {
       let accrued = item.accrued || 0;
       accrued += item.amount;
@@ -52,17 +60,22 @@ export const Asset = () => {
     return monthly_credit;
   };
 
-  //  form controls//
-  const showAddForms = () => {
-    setShowAddForm(!showAddForm);
+  const fetchCurrency = async () => {
+    await axios
+      .get("https://ipapi.co/json/")
+      .then((response) => {
+        let data = response.data;
+        setCurrency(data.currency);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleInputChange = (event) => {
-    // console.log(event.target.value);
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-
     setAssetsForm({
       ...assetForm,
       [name]: value,
@@ -89,8 +102,6 @@ export const Asset = () => {
 
     window.location.reload();
   };
-
-  const token = getCookie("token");
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -153,7 +164,7 @@ export const Asset = () => {
                   value={principal}
                   onChange={handleInputChange}
                 />
-                <small>eg. $1000</small>
+                <small>eg. {symbol} 1000</small>
               </div>
             </div>
             <div className="form-row form-group d-flex d-row justify-content-center">
@@ -201,7 +212,7 @@ export const Asset = () => {
                 value={item.amount}
                 displayType={"text"}
                 thousandSeparator={true}
-                prefix={"$"}
+                prefix={symbol}
                 decimalScale={0}
               />
               <br />
@@ -246,21 +257,25 @@ export const Asset = () => {
       <div className="row">
         <Box
           name="Avg Monthly Credit"
+          currency={currency}
           amount={getMonthlyCredit()}
           isPercentage={false}
         />
         <Box
           name="Avg Daily Credi"
+          currency={currency}
           amount={getMonthlyCredit() / 30}
           isPercentage={false}
         />
         <Box
           name="Avg Hour Credit"
+          currency={currency}
           amount={getMonthlyCredit() / 30 / 24}
           isPercentage={false}
         />
         <Box
           name="Avg Yearly Credit"
+          currency={currency}
           amount={getMonthlyCredit() * 12}
           isPercentage={false}
         />
