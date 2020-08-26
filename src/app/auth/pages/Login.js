@@ -119,7 +119,7 @@ const Login = ({ history }) => {
                           {buttonText}
                         </button>
                         <hr />
-                        <Facebook informParent={informParent} />
+                        {/* <Facebook informParent={informParent} /> */}
                         <Google informParent={informParent} />
                       </form>
                       <hr />
