@@ -16,7 +16,7 @@ const Register = ({ history }) => {
     password: "",
     buttonText: "Register",
   });
-  const [buttonDisable, setButtonDisable] = useState(true);
+  const [buttonDisable, setButtonDisable] = useState(false);
   const [showSubmittedMessage, setShowSubmittedMessage] = useState("");
 
   const handleChange = (name) => (event) => {
