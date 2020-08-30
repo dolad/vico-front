@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import "../App.css";
 import { APIContext } from "../context/Context";
 
 const UserProfile = () => {
@@ -9,59 +8,72 @@ const UserProfile = () => {
 
   return (
     <div>
-      <div class="container emp-profile">
-        <form method="post">
-          <div class="row">
-            <div class="col-md-4">
-              <div class="profile-img">
-                <img
-                  src={require("../../assets/images/profile.png")}
-                  alt="User profile image"
-                />
-                <div class="file btn btn-lg btn-primary">
-                  Change Photo
-                  <input type="file" name="file" />
+      <div className="container">
+        <div className="row card">
+          <div className="col-sm-12 col-md-10 col-md-10">
+            <div className="row">
+              <div class="col-md-6 pt-2">
+                <div class="profile-img">
+                  <img
+                    src={require("../../assets/images/profile.png")}
+                    alt="User profile image"
+                  />
+                </div>
+                <div class="profile-head pt-4 pb-4 ml-3">
+                  <h2>
+                    {usersdata.firstname} {""} {usersdata.lastname}
+                  </h2>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6 row">
-              <div class="profile-head col-8">
-                <h2>
-                  {usersdata.firstname} {""} {usersdata.lastname}
-                </h2>
-              </div>
-              <div class="col-md-4 text-right">
-                <input
-                  type="submit"
-                  class="profile-edit-btn"
-                  name="btnAddMore"
-                  value="Edit Profile"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-8">
-              <div class="row">
-                <div class="col-md-6">
-                  <label>Name</label>
+              <div class="col-md-6 pt-5">
+                <div className="row">
+                  <div class="col-md-4 col-lg-4 col-sm-6">
+                    <label>Name</label>
+                  </div>
+                  <div class="col-md-8 col-lg-8 col-sm-12 text-capitalize">
+                    <h5>
+                      {usersdata.firstname} {usersdata.lastname}
+                    </h5>
+                  </div>
                 </div>
-                <div class="col-md-6">
-                  {usersdata.firstname} {""} {usersdata.lastname}
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <label>Email</label>
-                </div>
-                <div class="col-md-6">
-                  <p>{usersdata.email}</p>
+                <div className="row pt-3">
+                  <div class="col-md-4 col-lg-4 col-sm-12">
+                    <label>Email</label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 col-lg-8">
+                    <h5>
+                      <p>{usersdata.email}</p>
+                    </h5>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </form>
+          {/* */}
+          {/* 
+        </div>
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-6">
+                <label>Name</label>
+              </div>
+              <div class="col-md-6">
+                {usersdata.firstname} {""} {usersdata.lastname}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Email</label>
+              </div>
+              <div class="col-md-6">
+                <p>{usersdata.email}</p>
+              </div>
+            </div>
+          </div>
+      </div> */}
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Collapse } from "react-bootstrap";
-import "../App.css";
+import "../mystyle.module.css";
 
 class Sidebar extends Component {
   state = {};
@@ -84,14 +84,14 @@ class Sidebar extends Component {
           </li>
           <li
             className={
-              this.isPathActive("/dashboard/services")
+              this.isPathActive("/dashboard/income")
                 ? "nav-item active"
                 : "nav-item"
             }
           >
-            <Link className="nav-link" to={`${this.props.match.url}/services`}>
+            <Link className="nav-link" to={`${this.props.match.url}/income`}>
               <i className="mdi  mdi-briefcase-upload menu-icon"></i>
-              <span className="menu-title">Services</span>
+              <span className="menu-title">Income</span>
             </Link>
           </li>
           <li

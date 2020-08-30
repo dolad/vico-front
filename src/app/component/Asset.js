@@ -52,10 +52,16 @@ export const Asset = () => {
     setAccruedSum(accrued_sum_local);
   };
 
-  const getMonthlyCredit = () => {
+  const getLastAsset = () => {
+    let lastAssets = 0;
+    lastAssets = asset[asset.length - 1].amount;
+    return lastAssets;
+  };
+
+  const getTotalAssets = () => {
     let monthly_credit = 0;
     asset.forEach(function (asset) {
-      monthly_credit += asset.amount / 12;
+      monthly_credit += asset.amount;
     });
     return monthly_credit;
   };
@@ -138,49 +144,49 @@ export const Asset = () => {
   const valid = name.length > 0 && principal.length > 0;
 
   const Form = () => (
-    <div className="row card d-flex justify-content-center  align-item-center mt-5">
-      <div className="col-sm-1- col-lg-10 col-sm-10 pt-5 pl-5 ">
-        <div className="row">Add Asset here</div>
-        <div className="row">
-          <form>
-            <div className="form-row form-group">
-              <div className="col-5">
-                <input
-                  className="form-control form-control-lg"
-                  type="text"
-                  placeholder="Name"
-                  name="name"
-                  value={name}
-                  onChange={handleInputChange}
-                />
-                <small>eg. Bank deposit</small>
-              </div>
-              <div className="col">
-                <input
-                  className="form-control form-control-lg"
-                  type="text"
-                  placeholder="Principal"
-                  name="principal"
-                  value={principal}
-                  onChange={handleInputChange}
-                />
-                <small>eg. {symbol} 1000</small>
-              </div>
+    <div className="row card  d-flex justify-content-center mt-5">
+      <div className="row mt-3 ml-3">Add Asset here</div>
+      <div className="row pt-4">
+        <form>
+          <div className="form-row form-group ml-5">
+            <div className="col-sm-12 col-lg-6 col-md-6 ">
+              <input
+                className="form-control form-control-lg"
+                type="text"
+                style={{ width: 230, marginRight: 50 }}
+                placeholder="Description"
+                name="name"
+                value={name}
+                onChange={handleInputChange}
+              />
+              <small>eg. Bank deposit</small>
             </div>
-            <div className="form-row form-group d-flex d-row justify-content-center">
-              <div className="col-sm-4 col-xs-4 col-md-4 col-lg-3">
-                <button
-                  className="btn btn-block btn-primary btn-sm"
-                  type="submit"
-                  disabled={!valid}
-                  onClick={(e) => submitHandler(e)}
-                >
-                  Add asset
-                </button>
-              </div>
+            <div className="col-sm-12 col-lg-6 col-md-6">
+              <input
+                className="form-control form-control-lg"
+                type="text"
+                placeholder="Amount"
+                name="principal"
+                value={principal}
+                onChange={handleInputChange}
+              />
+              <small>eg. {symbol} 1000</small>
             </div>
-          </form>
-        </div>
+          </div>
+          <div className="form-row form-group d-flex d-row justify-content-center">
+            <div className="col-sm-4 col-xs-4 col-md-4 col-lg-3">
+              <button
+                className="btn btn-block btn-primary btn-sm"
+                style={{ height: 35 }}
+                type="submit"
+                disabled={!valid}
+                onClick={(e) => submitHandler(e)}
+              >
+                Add asset
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );
@@ -221,11 +227,17 @@ export const Asset = () => {
 
             <td>
               <button
-                className="btn btn-danger btn-sm"
+                className="btn btn-danger btn-sm mr-2"
                 onClick={() => handleDelete(item)}
               >
                 <i className="fa fa-times" />
               </button>
+              {/* <button
+                className="btn btn-primary btn-sm"
+                onClick={() => handleDelete(item)}
+              >
+                <i className="fa fa-edit" />
+              </button> */}
             </td>
           </tr>
           <tr className="table-divider"></tr>
@@ -256,32 +268,32 @@ export const Asset = () => {
       <h4>hello</h4>
       <div className="row">
         <Box
-          name="Avg Monthly Credit"
+          name="Total Assets"
           currency={currency}
-          amount={getMonthlyCredit()}
+          amount={getTotalAssets()}
           isPercentage={false}
         />
         <Box
-          name="Avg Daily Credi"
+          name="Assets per Day"
           currency={currency}
-          amount={getMonthlyCredit() / 30}
+          amount={getTotalAssets() / 30}
           isPercentage={false}
         />
         <Box
-          name="Avg Hour Credit"
+          name="Assets per Hour"
           currency={currency}
-          amount={getMonthlyCredit() / 30 / 24}
+          amount={getTotalAssets() / 30 / 24}
           isPercentage={false}
         />
         <Box
-          name="Avg Yearly Credit"
+          name="your last Assets"
           currency={currency}
-          amount={getMonthlyCredit() * 12}
+          amount={getLastAsset()}
           isPercentage={false}
         />
       </div>
       <div className="row">
-        <div className="col-6 pt-1">{Form()}</div>
+        <div className="col-6 pt-1 ">{Form()}</div>
         {/* <Area /> */}
         <div className="col-6 pt-2">{Table()}</div>
       </div>

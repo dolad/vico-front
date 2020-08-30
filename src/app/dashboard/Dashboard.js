@@ -97,7 +97,7 @@ const Dashboard = () => {
   const getMonthlyAsset = () => {
     let monthly_credit = 0;
     asset.forEach(function (asset) {
-      monthly_credit += asset.amount / 12;
+      monthly_credit += asset.amount;
     });
     return monthly_credit;
   };
@@ -120,33 +120,36 @@ const Dashboard = () => {
   };
 
   const { name, principal } = Form;
-
+  // please note service is also refferd to as income
   return (
     <div>
       <ToastContainer />
       <div className="row">
         <Box
-          name="Avg Asset"
+          name="Your Worth"
+          currency={currency}
+          amount={
+            getMonthlyAsset() + getMonthlyServices() - getMonthlyExpenses()
+          }
+          isPercentage={false}
+        />
+        <Box
+          name="Total Assets"
           currency={currency}
           amount={getMonthlyAsset()}
           isPercentage={false}
         />
+
         <Box
-          name="Avg Expenses"
-          currency={currency}
-          amount={getMonthlyExpenses()}
-          isPercentage={false}
-        />
-        <Box
-          name="Avg Monthly Services"
+          name="Total Income"
           currency={currency}
           amount={getMonthlyServices()}
           isPercentage={false}
         />
         <Box
-          name="Avg Daily Serivice"
+          name="Total Expenses"
           currency={currency}
-          amount={getMonthlyExpenses() / 30}
+          amount={getMonthlyExpenses()}
           isPercentage={false}
         />
       </div>
@@ -155,14 +158,14 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2 className="card-title mb-0">Add Services</h2>
+                <h2 className="card-title mb-0">Add Finance</h2>
                 <div className="wrapper d-flex"></div>
               </div>
               <div className="chart-container">
                 <form>
                   <div className="form-row">
                     <div className="form-group col-md-6">
-                      <label for="inputState">Selet Type</label>
+                      <label for="inputState">Select Type</label>
                       <select
                         id="inputState"
                         className="form-control"
@@ -176,27 +179,25 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className="form-row">
-                    <div className="form-group col-md-6">
-                      <label for="inputEmail4">Name</label>
+                    <div className="form-group col-md-12">
+                      <label for="inputEmail4">Name or Description</label>
                       <input
                         type="text"
                         className="form-control"
-                        id="inputEmail4"
                         name="name"
                         placeholder="Name"
                         value={name}
                         onChange={handleInputChange}
                       />
                     </div>
-                    <div className="form-group col-md-6">
-                      <label for="inputEmail4">Principal</label>
+                    <div className="form-group col-md-12">
+                      <label for="inputEmail4">Amount</label>
                       <input
                         type="text"
                         className="form-control"
-                        id="inputEmail4"
                         name="principal"
                         value={principal}
-                        placeholder="Principl"
+                        placeholder="Amount"
                         onChange={handleInputChange}
                       />
                     </div>
@@ -204,9 +205,10 @@ const Dashboard = () => {
                       <button
                         type="submit"
                         className="btn btn-primary"
+                        style={{ height: 35, width: 150 }}
                         onClick={(e) => submitHandler(e)}
                       >
-                        submit
+                        Submit
                       </button>
                     </div>
                   </div>

@@ -71,7 +71,7 @@ const Expenses = () => {
     return total_principal + accrued_sum;
   };
 
-  const getMonthlyDebit = () => {
+  const getTotalExpenses = () => {
     let monthly_debit = 0;
     expenses.forEach(function (asset) {
       monthly_debit += asset.amount;
@@ -102,6 +102,12 @@ const Expenses = () => {
       ...expensesForm,
       [name]: value,
     });
+  };
+
+  const getLastExpenses = () => {
+    let lastExpenses = 0;
+    lastExpenses = expenses[expenses.length - 1].amount;
+    return lastExpenses;
   };
 
   const handleDelete = async (item) => {
@@ -158,49 +164,49 @@ const Expenses = () => {
   const valid = name.length > 0 && principal.length > 0;
 
   const Form = () => (
-    <div className="row card d-flex justify-content-center align-item-center">
-      <div className="col-sm-1- col-lg-10 col-sm-10 p-3 m-3 ">
-        <div className="row p-3">Add Expenses here</div>
-        <div className="row">
-          <form>
-            <div className="form-row form-group">
-              <div className="col-5">
-                <input
-                  className="form-control form-control-lg"
-                  type="text"
-                  placeholder="Name"
-                  name="name"
-                  value={name}
-                  onChange={handleInputChange}
-                />
-                <small>eg. Bank deposit</small>
-              </div>
-              <div className="col">
-                <input
-                  className="form-control form-control-lg"
-                  type="number"
-                  placeholder="Principal"
-                  name="principal"
-                  value={principal}
-                  onChange={handleInputChange}
-                />
-                <small>eg. {symbol} 1000</small>
-              </div>
+    <div className="row card  d-flex justify-content-center mt-5">
+      <div className="row mt-3 ml-3">Add Expenses here</div>
+      <div className="row pt-4">
+        <form>
+          <div className="form-row form-group ml-5">
+            <div className="col-sm-12 col-lg-6 col-md-6 ">
+              <input
+                className="form-control form-control-lg"
+                type="text"
+                style={{ width: 230, marginRight: 50 }}
+                placeholder="Description"
+                name="name"
+                value={name}
+                onChange={handleInputChange}
+              />
+              <small>eg. Bank deposit</small>
             </div>
-            <div className="form-row form-group d-flex d-row justify-content-center">
-              <div className="col-sm-4 col-xs-4 col-md-4 col-lg-3">
-                <button
-                  className="btn btn-block btn-primary btn-sm"
-                  type="submit"
-                  disabled={!valid}
-                  onClick={(e) => submitHandler(e)}
-                >
-                  Add asset
-                </button>
-              </div>
+            <div className="col-sm-12 col-lg-6 col-md-6">
+              <input
+                className="form-control form-control-lg"
+                type="text"
+                placeholder="Amount"
+                name="principal"
+                value={principal}
+                onChange={handleInputChange}
+              />
+              <small>eg. {symbol} 1000</small>
             </div>
-          </form>
-        </div>
+          </div>
+          <div className="form-row form-group d-flex d-row justify-content-center">
+            <div className="col-sm-4 col-xs-4 col-md-4 col-lg-3">
+              <button
+                className="btn btn-block btn-primary btn-sm"
+                style={{ height: 35 }}
+                type="submit"
+                disabled={!valid}
+                onClick={(e) => submitHandler(e)}
+              >
+                Add Expenses
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );
@@ -253,43 +259,42 @@ const Expenses = () => {
   return (
     <div>
       <ToastContainer />
-      <h4>hello</h4>
       <div className="row">
         <Box
-          name="Avg Monthly Debit"
+          name="Total Expenses"
           currency={currency}
-          amount={getMonthlyDebit()}
+          amount={getTotalExpenses()}
           isPercentage={false}
         />
         <Box
-          name="Avg Daily Debit"
+          name="Expenses per Day"
           currency={currency}
-          amount={getMonthlyDebit() / 30}
+          amount={getTotalExpenses() / 30}
           isPercentage={false}
         />
         <Box
-          name="Avg Hour Debit"
+          name="Expenses per Hour"
           currency={currency}
-          amount={getMonthlyDebit() / 30 / 24}
+          amount={getTotalExpenses() / 30 / 24}
           isPercentage={false}
         />
         <Box
-          name="Avg Yearly Debit"
+          name="Your Last Expenses"
           currency={currency}
-          amount={getMonthlyDebit() * 12}
+          amount={getLastExpenses()}
           isPercentage={false}
         />
-        <Box
+        {/* <Box
           name="Avg Est Principal "
           currency={currency}
           amount={getTotalEstimatedPrincipal()}
           isPercentage={false}
-        />
+        /> */}
       </div>
       <div className="row">
         <div className="col-6 pt-4">{Form()}</div>
         {/* <Area /> */}
-        <div className="col-6">{Table()}</div>
+        <div className="col-6 pt-5">{Table()}</div>
       </div>
     </div>
   );

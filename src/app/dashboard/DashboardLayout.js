@@ -9,7 +9,7 @@ import ChartJs from "../charts/ChartJs";
 
 const Dashboard = lazy(() => import("../dashboard/Dashboard"));
 const Assets = lazy(() => import("../component/Asset"));
-const Services = lazy(() => import("../component/Services"));
+const Income = lazy(() => import("../component/Services"));
 const Expenses = lazy(() => import("../component/Expenses"));
 const UserProfile = lazy(() => import("../component/UserProfile"));
 
@@ -36,9 +36,9 @@ const DashboardLayout = (props) => {
                 component={Assets}
               />
               <Route
-                path={`${props.match.url}/services`}
+                path={`${props.match.url}/income`}
                 exact
-                component={Services}
+                component={Income}
               />
               <Route
                 path={`${props.match.url}/expenses`}

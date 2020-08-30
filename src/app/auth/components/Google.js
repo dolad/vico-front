@@ -28,6 +28,7 @@ const Google = ({ informParent = (f) => f }) => {
         render={(renderProps) => (
           <button
             className="btn btn-block btn-google auth-form-btn"
+            style={{ height: 40 }}
             onClick={renderProps.onClick}
             disabled={renderProps.disabled}
           >
