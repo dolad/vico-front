@@ -19,11 +19,15 @@ const Context = ({ children, history }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const token = getCookie("token");
 
-  useEffect(() => {
+  const checkAuth = () => {
     actionsType.fetchData(dispatch, token, history);
     actionsType.fetchAssetData(dispatch, token);
     actionsType.fetchServiceData(dispatch, token);
     actionsType.fetchExpensesData(dispatch, token);
+  };
+
+  useEffect(() => {
+    checkAuth();
   }, [token]);
 
   return (

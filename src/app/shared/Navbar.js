@@ -1,14 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
 import { APIContext } from "../context/Context";
+import { signout } from "../auth/components/helper";
+import { withRouter } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ history }) => {
   const { state } = useContext(APIContext);
   const { usersdata } = state;
   console.log(usersdata);
 
   const toggleOffcanvas = () => {
     document.querySelector(".sidebar-offcanvas").classList.toggle("active");
+  };
+  const signUserOut = (e) => {
+    e.preventDefault();
+    signout(() => {
+      history.push("/");
+    });
   };
   return (
     <nav className="navbar  col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row">
@@ -61,7 +69,7 @@ const Navbar = () => {
                 </Dropdown.Item>
                 <Dropdown.Item
                   className="dropdown-item preview-item d-flex align-items-center border-0"
-                  onClick={(evt) => evt.preventDefault()}
+                  onClick={(evt) => signUserOut(evt)}
                 >
                   Sign Out
                 </Dropdown.Item>
@@ -81,4 +89,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default withRouter(Navbar);

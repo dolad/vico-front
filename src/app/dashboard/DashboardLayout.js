@@ -1,7 +1,6 @@
 import React, { lazy, useEffect, useReducer, createContext } from "react";
 import Context from "../context/Context";
 import { withRouter, Route } from "react-router-dom";
-
 import Navbar from "../shared/Navbar";
 import Sidebar from "../shared/Sidebar";
 import Footer from "../shared/Footer";
