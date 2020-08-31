@@ -6,8 +6,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import axios from "axios";
 import Area from "../charts/Area";
-// import DatePicker from 'react-datepicker';
-// import { Dropdown } from 'react-bootstrap';
 
 const Dashboard = () => {
   const { state } = useContext(APIContext);

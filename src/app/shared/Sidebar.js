@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Collapse } from "react-bootstrap";
-import "../mystyle.module.css";
+// import "../mystyle.css";
 
 class Sidebar extends Component {
   state = {};

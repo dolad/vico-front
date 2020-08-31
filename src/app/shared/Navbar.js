@@ -15,7 +15,7 @@ const Navbar = ({ history }) => {
   const signUserOut = (e) => {
     e.preventDefault();
     signout(() => {
-      history.push("/");
+      history.push("/auth/login");
     });
   };
   return (

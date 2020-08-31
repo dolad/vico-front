@@ -5,19 +5,19 @@ import axios from "axios";
 const Facebook = ({ informParent = (f) => f }) => {
   const responseFacebook = (response) => {
     console.log(response);
-    // axios({
-    //   method: "POST",
-    //   url: `${process.env.REACT_APP_API}/facebook-login`,
-    //   data: { userID: response.userID, accessToken: response.accessToken },
-    // })
-    //   .then((response) => {
-    //     console.log("FACEBOOK SIGNIN SUCCESS", response);
-    //     // inform parent component
-    //     informParent(response);
-    //   })
-    //   .catch((error) => {
-    //     console.log("FACEBOOK SIGNIN ERROR", error.response);
-    //   });
+    axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_API}/facebook-login`,
+      data: { userID: response.userID, accessToken: response.accessToken },
+    })
+      .then((response) => {
+        console.log("FACEBOOK SIGNIN SUCCESS", response);
+        // inform parent component
+        informParent(response);
+      })
+      .catch((error) => {
+        console.log("FACEBOOK SIGNIN ERROR", error.response);
+      });
   };
   return (
     <div className="pb-3">

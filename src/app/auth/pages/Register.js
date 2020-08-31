@@ -4,7 +4,7 @@ import { Button, Alert } from "react-bootstrap";
 import Facebook from "../components/Facebook";
 import Google from "../components/Google";
 import { isAuth, authenticate } from "../components/helper";
-import styles from "../../mystyle.module.css";
+// import "../../mystyle.css";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
@@ -64,7 +64,7 @@ const Register = ({ history }) => {
     <div class="bg-gradient-primary">
       <div class="container mt-5">
         <div class="row justify-content-center align-items-center">
-          <div class="col-xl-6 col-lg-6 col-md-8 col-sm-10">
+          <div class="col-xl-6 col-lg-8 col-md-8 col-sm-10">
             <div class="card o-hidden border-0 shadow-lg my-5">
               <div class="card-body p-0">
                 <div class="row d-flex justify-content-center align-items-center">

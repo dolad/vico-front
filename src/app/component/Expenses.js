@@ -11,10 +11,8 @@ import Box from "../shared/Box";
 
 const Expenses = () => {
   const { state } = useContext(APIContext);
-  // console.log(state);
   const { expenses } = state;
 
-  const [monthly_income, setMonthlyIncome] = useState(0);
   const [expensesForm, setExpensesForm] = useState({
     name: "",
     principal: "",
@@ -62,7 +60,6 @@ const Expenses = () => {
 
   const getTotalEstimatedPrincipal = () => {
     let total_principal = 0;
-
     expenses.forEach(function (asset) {
       const estimated_principal = asset.amount * 12 * 100;
       total_principal += estimated_principal;

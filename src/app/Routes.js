@@ -9,7 +9,6 @@ const Register = lazy(() => import("./auth/pages/Register"));
 const Activate = lazy(() => import("./auth/pages/ActivateAcc"));
 const ForgotPassword = lazy(() => import("./auth/pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./auth/pages/ResetPassword"));
-
 const Home = lazy(() => import("./component/Home"));
 
 class Routes extends Component {
@@ -17,7 +16,7 @@ class Routes extends Component {
     return (
       <Suspense fallback={<Spinner />}>
         <Switch>
-          <Route path="/" exact component={Register}></Route>
+          <Route path="/" exact component={Home}></Route>
           <PrivateRoutes
             path="/dashboard"
             component={DashboardLayout}

@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
-import styles from "../../mystyle.module.css";
 
 const Login = ({ history }) => {
   const [values, setValues] = useState({
@@ -113,7 +112,7 @@ const Login = ({ history }) => {
                             </label>
                           </div>
                         </div> */}
-                        <div className={styles.submitButton}>
+                        <div className="submitButton">
                           <button
                             className="btn btn-primary btn-block"
                             style={{ height: 40 }}
